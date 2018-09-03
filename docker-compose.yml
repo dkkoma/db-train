@@ -6,12 +6,9 @@ services:
     container_name: db_1day_mysql
     image: mysql:5.7
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    ports:
-      - "${MYSQL_PORT}:3306"
     volumes:
       - ./mysql-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_DATABASE: treasure
       MYSQL_USER: treasure
       MYSQL_PASSWORD: treasure
@@ -19,7 +16,7 @@ services:
       TZ: "Asia/Tokyo"
 
   app:
-    image: sql-migrate-bin:latest
+    image: dkkoma/sql-migrate-bin:latest
     volumes:
       - ./db:/app
     working_dir: /app

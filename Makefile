@@ -4,12 +4,11 @@ DOCKER_COMPOSE_YAML    := docker-compose.yml
 DOCKER_COMPOSE         := $(shell pwd)/bin/docker-compose
 DOCKER_COMPOSE_CMD     := $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_YAML)
 DOCKER_COMPOSE_VERSION := 1.14.0
-ENV                    := .env
 DBCONFIG               := $(DB_DIR)/dbconfig.yml
 MIGRATION_DIR          := $(DB_DIR)/migrations
 PASS                   := treasure
 
-install: $(DOCKER_COMPOSE) $(ENV) $(DBCONFIG) $(MIGRATION_DIR)
+install: $(DOCKER_COMPOSE) $(DBCONFIG) $(MIGRATION_DIR)
 
 up: install
 	$(DOCKER_COMPOSE_CMD) up -d
@@ -17,12 +16,13 @@ up: install
 
 rm: install stop
 	$(DOCKER_COMPOSE_CMD) rm
+	@rm .set-lang
 
 stop:
 	$(DOCKER_COMPOSE_CMD) stop
 
 debug: .set-lang
-	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p treasure
+	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) treasure
 
 ssh: .set-lang
 	$(DOCKER_COMPOSE_CMD) exec mysql bash
@@ -30,8 +30,14 @@ ssh: .set-lang
 query: .set-lang
 	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) treasure -e "$(shell cat "$(FILE)")"
 
-migrate/dry:
-	
+migrate/status:
+	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate status"
+
+migrate/up:
+	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate up"
+
+db/reset:
+	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) -e "DROP DATABASE treasure; CREATE DATABASE treasure;"
 
 test:
 	$(MAKE) query FILE=app/sql/q2.sql
@@ -51,9 +57,6 @@ $(DOCKER_COMPOSE): $(BIN_DIR)
 
 $(BIN_DIR):
 	mkdir $@
-
-$(ENV):
-	cp .env.tmpl $(ENV)
 
 $(DBCONFIG): $(DB_DIR)
 	cp dbconfig.yml.tmpl $(DBCONFIG)
