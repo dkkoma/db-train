@@ -9,7 +9,7 @@ make up
 ## up
 
 ```
-make migrate/up
+$ make migrate/up
 
 Applied 2 migrations
 ```
@@ -19,7 +19,7 @@ Applied 2 migrations
 ## migration状態の確認
 
 ```
-make migrate/status
+$ make migrate/status
 
 +---------------------------------+-------------------------------+
 |            MIGRATION            |            APPLIED            |
@@ -35,10 +35,10 @@ APPLIEDに日付が入ってればそこまで適用済み。noの場合は適�
 
 以下でmysqlコンソールに入れます。
 ```
-make debug
+$ make debug
 ```
 
 どうにもならなくなったら以下でDBを再作成してください。migration状態を全て吹っ飛ばしてイチからやり直せます。
 ```
-make db/reset
+$ make db/reset
 ```
