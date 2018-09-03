@@ -6,7 +6,7 @@ DOCKER_COMPOSE_CMD     := $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_YAML)
 DOCKER_COMPOSE_VERSION := 1.14.0
 DBCONFIG               := $(DB_DIR)/dbconfig.yml
 MIGRATION_DIR          := $(DB_DIR)/migrations
-PASS                   := treasure
+PASS                   := treasure # for development
 
 install: $(DOCKER_COMPOSE) $(DBCONFIG) $(MIGRATION_DIR)
 
