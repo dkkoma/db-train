@@ -1,7 +1,7 @@
 # setup
 
 ```
-make up
+$ make up
 ```
 
 # migration
