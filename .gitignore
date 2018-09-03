@@ -1,0 +1,5 @@
+/.env
+/dbconfig.yml
+/mysql-data/
+/bin/docker-compose
+/.set-lang

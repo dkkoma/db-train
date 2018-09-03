@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+
+  mysql:
+    container_name: treasure_mysql
+    image: mysql:5.7
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: treasure
+      MYSQL_USER: treasure
+      MYSQL_PASSWORD: treasure
+      LANG: ja_JP.UTF-8
+      TZ: "Asia/Tokyo"
