@@ -17,3 +17,12 @@ services:
       MYSQL_PASSWORD: treasure
       LANG: ja_JP.UTF-8
       TZ: "Asia/Tokyo"
+
+  app:
+    image: sql-migrate-bin:latest
+    volumes:
+      - ./db:/app
+    working_dir: /app
+    links:
+      - mysql
+      - mysql:database

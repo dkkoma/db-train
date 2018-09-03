@@ -1,15 +1,15 @@
 BIN_DIR                := $(shell pwd)/bin
+DB_DIR                := $(shell pwd)/db
 DOCKER_COMPOSE_YAML    := docker-compose.yml
 DOCKER_COMPOSE         := $(shell pwd)/bin/docker-compose
 DOCKER_COMPOSE_CMD     := $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_YAML)
 DOCKER_COMPOSE_VERSION := 1.14.0
 ENV                    := .env
-DBCONFIG               := dbconfig.yml
-MIGRATION_DIR          := migrations
+DBCONFIG               := $(DB_DIR)/dbconfig.yml
+MIGRATION_DIR          := $(DB_DIR)/migrations
 PASS                   := treasure
 
 install: $(DOCKER_COMPOSE) $(ENV) $(DBCONFIG) $(MIGRATION_DIR)
-	#go get github.com/rubenv/sql-migrate/...
 
 up: install
 	$(DOCKER_COMPOSE_CMD) up -d
@@ -55,8 +55,11 @@ $(BIN_DIR):
 $(ENV):
 	cp .env.tmpl $(ENV)
 
-$(DBCONFIG):
+$(DBCONFIG): $(DB_DIR)
 	cp dbconfig.yml.tmpl $(DBCONFIG)
 
+$(DB_DIR):
+	mkdir $@
+
 $(MIGRATION_DIR):
-	mkdir migrations
+	mkdir $@
