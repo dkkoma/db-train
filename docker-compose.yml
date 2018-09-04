@@ -9,7 +9,7 @@ services:
     volumes:
       - ./mysql-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: a b c d e f g
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_DATABASE: treasure
       MYSQL_USER: treasure
       MYSQL_PASSWORD: treasure
