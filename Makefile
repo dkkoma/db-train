@@ -16,16 +16,17 @@ up: install
 
 rm: install stop
 	$(DOCKER_COMPOSE_CMD) rm
+	@rm -rf mysql-data/
 	@rm .set-lang
 
 stop:
 	$(DOCKER_COMPOSE_CMD) stop
 
-debug: .set-lang
+debug/mysql: .set-lang
 	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) treasure
 
-ssh: .set-lang
-	$(DOCKER_COMPOSE_CMD) exec mysql bash
+debug/app: .set-lang
+	$(DOCKER_COMPOSE_CMD) run app bash
 
 query: .set-lang
 	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) treasure -e "$(shell cat "$(FILE)")"
@@ -35,6 +36,15 @@ migrate/status:
 
 migrate/up:
 	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate up"
+
+migrate/down:
+	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate down"
+
+migrate/new:
+	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate new $(NAME)"
+
+migrate/dryrun:
+	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate up -dryrun"
 
 db/reset:
 	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) -e "DROP DATABASE treasure; CREATE DATABASE treasure;"
