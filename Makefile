@@ -26,25 +26,25 @@ debug/mysql: .set-lang
 	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) treasure
 
 debug/app: .set-lang
-	$(DOCKER_COMPOSE_CMD) run app bash
+	$(DOCKER_COMPOSE_CMD) run --rm app bash
 
 query: .set-lang
 	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) treasure -e "$(shell cat "$(FILE)")"
 
 migrate/status:
-	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate status"
+	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate status"
 
 migrate/up:
-	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate up"
+	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate up"
 
 migrate/down:
-	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate down"
+	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate down"
 
 migrate/new:
-	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate new $(NAME)"
+	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate new $(NAME)"
 
 migrate/dryrun:
-	$(DOCKER_COMPOSE_CMD) run app bash -c "sql-migrate up -dryrun"
+	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate up -dryrun"
 
 db/reset:
 	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) -e "DROP DATABASE treasure; CREATE DATABASE treasure;"
