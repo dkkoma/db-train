@@ -74,10 +74,10 @@ $ make debug/app
 
 ## GitHub
 
-https://github.com/rubenv/sql-migrate
-https://github.com/dkkoma/sql-migrate-bin
+* https://github.com/rubenv/sql-migrate
+* https://github.com/dkkoma/sql-migrate-bin
 
 ## Docker Hub
 
-https://hub.docker.com/_/mysql/
-https://hub.docker.com/r/dkkoma/sql-migrate-bin/
+* https://hub.docker.com/_/mysql/
+* https://hub.docker.com/r/dkkoma/sql-migrate-bin/
