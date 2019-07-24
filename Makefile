@@ -3,7 +3,7 @@ DB_DIR                := $(shell pwd)/db
 DOCKER_COMPOSE_YAML    := docker-compose.yml
 DOCKER_COMPOSE         := $(shell pwd)/bin/docker-compose
 DOCKER_COMPOSE_CMD     := $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_YAML)
-DOCKER_COMPOSE_VERSION := 1.14.0
+DOCKER_COMPOSE_VERSION := 1.24.1
 DBCONFIG               := $(DB_DIR)/dbconfig.yml
 MIGRATION_DIR          := $(DB_DIR)/migrations
 PASS                   := treasure # for development
@@ -31,27 +31,8 @@ debug/app: .set-lang
 query: .set-lang
 	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) treasure -e "$(shell cat "$(FILE)")"
 
-migrate/status:
-	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate status"
-
-migrate/up:
-	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate up"
-
-migrate/down:
-	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate down"
-
-migrate/new:
-	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate new $(NAME)"
-
-migrate/dryrun:
-	$(DOCKER_COMPOSE_CMD) run --rm app bash -c "sql-migrate up -dryrun"
-
 db/reset:
 	$(DOCKER_COMPOSE_CMD) exec mysql mysql -u treasure -p$(PASS) -e "DROP DATABASE treasure; CREATE DATABASE treasure;"
-
-test:
-	$(MAKE) query FILE=app/sql/q2.sql
-	$(MAKE) query FILE=app/sql/q3.sql
 
 $(DOCKER_COMPOSE): $(BIN_DIR)
 	curl -L https://github.com/docker/compose/releases/download/$(DOCKER_COMPOSE_VERSION)/docker-compose-$(shell uname -s)-$(shell uname -m) > $@
